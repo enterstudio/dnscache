@@ -8,7 +8,7 @@ The Go team's singleflight solution (which isn't in stable yet) is rather elegan
 ### Installation
 Install using the "go get" command:
 
-    go get github.com/viki-org/dnscache
+    go get github.com/gallir/dnscache
 
 ### Usage
 The cache is thread safe. Create a new instance by specifying how long each entry should be cached (in seconds). Items will be refreshed in the background.
@@ -25,14 +25,3 @@ The cache is thread safe. Create a new instance by specifying how long each entr
     //get the first net.IP as string
     ip, _ := resolver.FetchOneString("api.viki.io")
 
-If you are using an `http.Transport`, you can use this cache by speficifying a
-`Dial` function:
-
-    transport := &http.Transport {
-      MaxIdleConnsPerHost: 64,
-      Dial: func(network string, address string) (net.Conn, error) {
-        separator := strings.LastIndex(address, ":")
-        ip, _ := dnscache.FetchString(address[:separator])
-        return net.Dial("tcp", ip + address[separator:])
-      },
-    }
